@@ -24,17 +24,34 @@
 
 			function precarga () {
 
-				this.load.image("player-img", "player.png");
+				this.load.image("player", "imgs/player.jpeg");
 
 			}
 
 			function crear () {
 
-				player = this.add.image(64, 64, "player-img");
+				this.player = this.add.image(64, 64, "player");
+				this.cursors = this.input.keyboard.createCursorKeys();
 				
 			}
 			
-			function actualiza () {}
+			function actualiza () {
+
+
+				if (this.cursors.left.isDown) {
+					player.setVelocityX(-100);
+				}
+				else if (this.cursors.right.isDown) {
+					player.setVelocityX(100);
+				}
+				else if (this.cursors.up.isDown) {
+					player.setVelocityY(-100);
+				}
+				else if (this.cursors.down.isDown) {
+					player.setVelocityY(100);
+				}
+			
+			}
 
 		</script>
 	</body>

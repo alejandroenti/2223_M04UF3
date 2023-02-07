@@ -3,7 +3,7 @@ const fs = require('fs');
 
 http.createServer(function (request, response) {
 	
-	if (request.url == '/player.png') {
+	if (request.url == '/player.jpeg') {
 		fs.readFile("imgs/player.jpeg", function (err, data) {
 			if (err) {
 				console.error(err);
