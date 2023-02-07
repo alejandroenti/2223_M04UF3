@@ -3,6 +3,18 @@ const fs = require('fs');
 
 http.createServer(function (request, response) {
 	
+	if (request.url == '/player.png') {
+		fs.readFile("imgs/player.jpeg", function (err, data) {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			response.writeHead(200, {"Content-Type": "image/jpeg"});
+			response.write(data);
+		});
+	}
+
 	fs.readFile("index.html", function (err, data) {
 
 		if (err) {
