@@ -21,34 +21,62 @@
 			const game = new Phaser.Game(config);
 			
 			let player;
+			let enemies = [];
+			let enemy_padding = 128;
+			let enemies_pos = [
+				{x: enemy_padding, y: enemy_padding},
+				{x: config.width / 2, y: enemy_padding},
+				{x: config.width - enemy_padding, y: enemy_padding},
+				{x: enemy_padding, y: config.height / 2},
+				{x: config.width - enemy_padding, y: config.height / 2},
+				{x: enemy_padding, y: config.height - enemy_padding},
+				{x: config.width / 2, y: config.height - enemy_padding},
+				{x: config.width - enemy_padding, y: config.height - enemy_padding}
+			]
+
+			let player_speed = 3;
+
+			let keyLeft;
+			let keyRight;
+			let keyUp;
+			let keyDown;
 
 			function precarga () {
 
-				this.load.image("player", "imgs/player.jpeg");
-
+				this.load.image("player-img", "player.png");
+				
 			}
 
 			function crear () {
 
-				this.player = this.add.image(64, 64, "player");
-				this.cursors = this.input.keyboard.createCursorKeys();
+				player = this.add.image(config.width / 2, config.height / 2, "player-img");
 				
+				for (let i = 0; i < enemies_pos.length; i++) {
+					let enemy = this.add.image(enemies_pos[i].x, enemies_pos[i].y , "player-img");
+					enemies.push(enemy);
+				}
+
+				key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+				key_right= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+				key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+				key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 			}
 			
 			function actualiza () {
 
 
-				if (this.cursors.left.isDown) {
-					player.setVelocityX(-100);
+				if (key_left.isDown) {
+					player.x -= player_speed;
 				}
-				else if (this.cursors.right.isDown) {
-					player.setVelocityX(100);
+				else if (key_right.isDown) {
+					player.x += player_speed;
 				}
-				else if (this.cursors.up.isDown) {
-					player.setVelocityY(-100);
+				
+				if (key_up.isDown) {
+					player.y -= player_speed;
 				}
-				else if (this.cursors.down.isDown) {
-					player.setVelocityY(100);
+				else if (key_down.isDown) {
+					player.y += player_speed;
 				}
 			
 			}

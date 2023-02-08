@@ -1,20 +1,8 @@
 const http = require('http');
 const fs = require('fs');
 
-http.createServer(function (request, response) {
+function sendIndex (response) {
 	
-	if (request.url == '/player.jpeg') {
-		fs.readFile("imgs/player.jpeg", function (err, data) {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			response.writeHead(200, {"Content-Type": "image/jpeg"});
-			response.write(data);
-		});
-	}
-
 	fs.readFile("index.html", function (err, data) {
 
 		if (err) {
@@ -24,9 +12,38 @@ http.createServer(function (request, response) {
 
 		response.writeHead(200, {"Content-Type": "text/html"});
 		response.write(data);
-
 		response.end();
-	
+
 	});
+}
+
+function sendPlayer (response) {
 	
+	fs.readFile("player.png", function (err, data) {
+
+		if (err) {
+			console.error(err);
+			return;
+		}
+
+		response.writeHead(200, {"Content-Type": "image/png"});
+		response.write(data);
+		response.end();
+	});
+}
+
+http.createServer(function (request, response) {
+	
+	let url = request.url.split("/");
+
+	switch(url[1]) {
+	
+	case "player.png":
+		sendPlayer(response);
+		break;
+
+	default:
+		sendIndex(response);
+	}
+
 }).listen(6969);
