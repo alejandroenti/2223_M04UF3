@@ -67,6 +67,8 @@
 					enemy.body.setCollideWorldBounds(true);
 					enemies.push(enemy);
 				}
+				
+				this.physics.add.collider(player, enemies);
 
 				key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 				key_right= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -92,10 +94,14 @@
 				}
 
 				for (let i= 0; i < enemies.length; i++) {
-					this.physics.moveToObject(enemies[i], player, 70);
+					this.physics.moveToObject(enemies[i], player);
+					this.physics.collide(enemies[i], enemies);
 				}
-			
-			}
+
+				  
+				this.physics.collide(player, enemies);
+
+		}
 
 		</script>
 	</body>
