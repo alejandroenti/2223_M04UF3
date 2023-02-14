@@ -51,6 +51,14 @@
 			function precarga () {
 
 				this.load.image("player-img", "player.png");
+				this.load.image("enemy-1", "enemy1.png");
+				this.load.image("enemy-2", "enemy2.png");
+				this.load.image("enemy-3", "enemy3.png");
+				this.load.image("enemy-4", "enemy4.png");
+				this.load.image("enemy-5", "enemy5.png");
+				this.load.image("enemy-6", "enemy6.png");
+				this.load.image("enemy-7", "enemy7.png");
+				this.load.image("enemy-8", "enemy8.png");
 				
 			}
 
@@ -62,7 +70,7 @@
 				player.body.setCollideWorldBounds(true);
 
 				for (let i = 0; i < enemies_pos.length; i++) {
-					let enemy = this.add.sprite(enemies_pos[i].x, enemies_pos[i].y , "player-img");
+					let enemy = this.add.sprite(enemies_pos[i].x, enemies_pos[i].y , "enemy-" + (i + 1));
 					this.physics.add.existing(enemy, false);
 					enemy.body.setCollideWorldBounds(true);
 					enemies.push(enemy);

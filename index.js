@@ -17,9 +17,9 @@ function sendIndex (response) {
 	});
 }
 
-function sendPlayer (response) {
+function sendPlayer (response, image) {
 	
-	fs.readFile("player.png", function (err, data) {
+	fs.readFile("imgs/" + image, function (err, data) {
 
 		if (err) {
 			console.error(err);
@@ -36,14 +36,13 @@ http.createServer(function (request, response) {
 	
 	let url = request.url.split("/");
 
-	switch(url[1]) {
-	
-	case "player.png":
-		sendPlayer(response);
-		break;
+	if (url[1].match("png")) {
 
-	default:
-		sendIndex(response);
+		sendPlayer(response, url[1]);
+		return;
+	
 	}
+
+	sendIndex(response);
 
 }).listen(6969);
