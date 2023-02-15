@@ -42,6 +42,7 @@
 			]
 
 			let player_speed = 3;
+			let player_weapon;
 
 			let keyLeft;
 			let keyRight;
@@ -68,6 +69,11 @@
 				
 				this.physics.add.existing(player, false);
 				player.body.setCollideWorldBounds(true);
+				
+				player_weapon = this.add.image(config.width / 2 - 64, config.height / 2, "player-img");
+
+				this.physics.add.existing(player_weapon, false);
+				player_weapon.body.setCollideWorldBounds(true);
 
 				for (let i = 0; i < enemies_pos.length; i++) {
 					let enemy = this.add.sprite(enemies_pos[i].x, enemies_pos[i].y , "enemy-" + (i + 1));
@@ -76,14 +82,13 @@
 					enemies.push(enemy);
 				}
 				
-				this.physics.add.collider(player, enemies);
-
 				key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 				key_right= this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 				key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 				key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
 			}
-			
+
 			function actualiza () {
 
 
@@ -104,10 +109,12 @@
 				for (let i= 0; i < enemies.length; i++) {
 					this.physics.moveToObject(enemies[i], player);
 					this.physics.collide(enemies[i], enemies);
+					this.physics.collide(player_weapon, enemies[i]);
 				}
-
-				  
+				
 				this.physics.collide(player, enemies);
+				this.physics.collide(player, player_weapon);
+
 
 		}
 
