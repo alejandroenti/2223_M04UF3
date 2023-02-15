@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/alejandroenti/2223_M04UF3/issues"
   },
-  "homepage": "https://github.com/alejandroenti/2223_M04UF3#readme"
+  "homepage": "https://github.com/alejandroenti/2223_M04UF3#readme",
+  "dependencies": {
+    "node-static": "^0.7.11"
+  }
 }
