@@ -74,7 +74,8 @@
 				player.body.setCollideWorldBounds(true);
 				
 				player_weapon = this.add.image(config.width / 2 - weapon_offset, config.height / 2, "metal-bat");
-
+				this.physics.add.existing(player_weapon, false);
+				
 				player_weapon.visible = false;
 
 				for (let i = 0; i < enemies_pos.length; i++) {
@@ -108,30 +109,35 @@
 				if (key_left.isDown) {
 					player.x -= player_speed;
 					player_weapon.x = player.x - weapon_offset;
+					player_weapon.y = player.y;
 				}
 				else if (key_right.isDown) {
 					player.x += player_speed;
 					player_weapon.x = player.x + weapon_offset;
+					player_weapon.y = player.y;
 				}
 				
 				if (key_up.isDown) {
 					player.y -= player_speed;
 					player_weapon.y = player.y - weapon_offset;
+					player_weapon.x = player.x;
 				}
 				else if (key_down.isDown) {
 					player.y += player_speed;
-					player_weapon.y = player.y + weapon_offset
+					player_weapon.y = player.y + weapon_offset;
+					player_weapon.x = player.x;
 				}
 
 				for (let i= 0; i < enemies.length; i++) {
 					this.physics.moveToObject(enemies[i], player);
-					this.physics.collide(player, player_weapon);
 					this.physics.collide(player, enemies);
-					this.physics.collide(enemies, player_weapon);
 					this.physics.collide(enemies[i], enemies);
+					
+					if (this.physics.collide(player_weapon, enemies[i])) {
+						console.log("Contact with enemie " + i);
+					}
 				}
-				
-						}
+			}
 
 		</script>
 	</body>
