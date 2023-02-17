@@ -46,6 +46,12 @@
 			let player_speed = 3;
 			let player_weapon;
 			let weapon_offset = 48;
+			
+			let score = 0 
+			let text_score;
+
+			let timer = 0;
+			let text_timer;
 
 			let keyLeft;
 			let keyRight;
@@ -82,7 +88,6 @@
 					let enemyImage = "enemy-" + Math.floor(Math.random() * enemies_max + 1);
 					let enemy = this.add.sprite(enemies_pos[i].x, enemies_pos[i].y , enemyImage);
 					this.physics.add.existing(enemy, false);
-					enemy.body.setCollideWorldBounds(true);
 					enemies.push(enemy);
 				}
 
@@ -91,51 +96,102 @@
 				key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 				key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
+				text_score = this.add.text(24, 24, "Score: 0", {font: '600 36px Arial', color: '#000000'});
+				text_timer = this.add.text(3 * config.width / 4, 24, "Time: 0", {font: '600 36px Arial', color: '#ffffff'});
+
+				this.physics.add.collider(enemies, player);
+
 				setInterval(() => {
 					
 					player_weapon.visible = true;
+					this.physics.world.enable(player_weapon);
 
 					setTimeout(() => {
 						player_weapon.visible = false;
+						this.physics.world.disable(player_weapon);
 					}, 400);
 
 				}, 2000);
 
+				setInterval(() => {
+				
+					timer++;
+					text_timer.setText("Time: " + timer);
+
+				}, 1000);
+
 			}
+
+			let last_dir = "L";
+			let last_x = config.width / 2;
+			let last_y = config.height / 2;
 
 			function actualiza () {
 
 
 				if (key_left.isDown) {
 					player.x -= player_speed;
-					player_weapon.x = player.x - weapon_offset;
-					player_weapon.y = player.y;
+					last_x = player.x;
+					last_y = player.y;
+					last_dir = "L";
 				}
 				else if (key_right.isDown) {
 					player.x += player_speed;
-					player_weapon.x = player.x + weapon_offset;
-					player_weapon.y = player.y;
+					last_x = player.x;
+					last_y = player.y;
+					last_dir = "R";
 				}
 				
 				if (key_up.isDown) {
 					player.y -= player_speed;
-					player_weapon.y = player.y - weapon_offset;
-					player_weapon.x = player.x;
+					last_x = player.x;
+					last_y = player.y;
+					last_dir = "U";
 				}
 				else if (key_down.isDown) {
 					player.y += player_speed;
-					player_weapon.y = player.y + weapon_offset;
-					player_weapon.x = player.x;
+					last_x = player.x;
+					last_y = player.y;
+					last_dir = "D";
 				}
 
 				for (let i= 0; i < enemies.length; i++) {
 					this.physics.moveToObject(enemies[i], player);
-					this.physics.collide(player, enemies);
-					this.physics.collide(enemies[i], enemies);
 					
 					if (this.physics.collide(player_weapon, enemies[i])) {
 						console.log("Contact with enemie " + i);
+						enemies[i].visible = false;
+						this.physics.world.disable(enemies[i]);
+						score ++;
+						text_score.setText("Score: " + score);
 					}
+				}
+
+				switch (last_dir) {
+				
+					case "L":
+						player_weapon.x = player.x - weapon_offset;
+						player_weapon.y = player.y;
+						player_weapon.rotation = 180 * Math.PI / 180;
+						break;
+
+					case "R":
+						player_weapon.x = player.x + weapon_offset;
+						player_weapon.y = player.y;
+						player_weapon.rotation = 0;
+						break;
+
+					case "U":
+						player_weapon.x = player.x;
+						player_weapon.y = player.y - weapon_offset;
+						player_weapon.rotation = 270 * Math.PI / 180;
+						break;
+
+					case "D":
+						player_weapon.x = player.x;
+						player_weapon.y = player.y + weapon_offset;
+						player_weapon.rotation = 90 * Math.PI / 180;
+						break;
 				}
 			}
 
